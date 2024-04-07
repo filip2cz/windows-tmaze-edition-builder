@@ -28,7 +28,7 @@ jobs:
     - name: Build and mount amd64 image
       shell: cmd
       run: |
-        "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         copype amd64 c:\winpe-amd64
         Dism /Mount-Image /ImageFile:"c:\winpe-amd64\media\sources\boot.wim" /index:1 /MountDir:"c:\winpe-amd64\mount"
 
@@ -52,7 +52,7 @@ jobs:
     - name: Unmount and build image
       shell: cmd
       run: |
-        "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         Dism /Unmount-Image /MountDir:c:\winpe-amd64\mount /Commit
         MakeWinPEMedia /ISO c:\winpe-amd64 c:\winpe-amd64\Windows-TMaze-Edition.iso
 
