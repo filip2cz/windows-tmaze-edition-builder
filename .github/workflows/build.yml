@@ -25,7 +25,14 @@ jobs:
         winget install --id Microsoft.ADKPEAddon --disable-interactivity --accept-source-agreements
         winget install --id Rustlang.Rustup --disable-interactivity --accept-source-agreements
 
-    - name: Build and mount amd64 image
+    - name: Build amd64 image
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        copype amd64 c:\winpe-amd64
+        Dism /Mount-Image /ImageFile:"c:\winpe-amd64\media\sources\boot.wim" /index:1 /MountDir:"c:\winpe-amd64\mount"
+
+    - name: Mount amd64 image
       shell: cmd
       run: |
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
@@ -49,11 +56,16 @@ jobs:
       run: |
         cp .\TMaze\target\release\tmaze.exe C:\winpe-amd64\mount\tmaze.exe
 
-    - name: Unmount and build image
+    - name: Unmount amd64 image
       shell: cmd
       run: |
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         Dism /Unmount-Image /MountDir:c:\winpe-amd64\mount /Commit
+
+    - name: Build amd64 iso
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         MakeWinPEMedia /ISO c:\winpe-amd64 c:\winpe-amd64\Windows-TMaze-Edition.iso
 
     - name: Copy things into dist directory
