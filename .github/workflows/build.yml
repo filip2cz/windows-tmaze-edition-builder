@@ -75,16 +75,22 @@ jobs:
         cp C:\winpe-amd64\Windows-TMaze-Edition.iso .\dist\Windows-TMaze-Edition.iso
         cp C:\winpe-amd64\media\sources\boot.wim .\dist\boot.wim
 
-    - name: Set outputs
-      id: vars
-      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-    - uses: ncipollo/release-action@v1
+    - name: Create draft release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: ".\dist\*"
-        commit: main
-        generateReleaseNotes: true
+        tag_name: v1.0.0
         draft: true
-        # tag: ${{ github.event.head_commit.id }}
-        tag: ${{ steps.vars.outputs.sha_short }}
+
+    - name: Upload release asset
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist
+        asset_name: ${{ github.sha }}-dist # Use GitHub SHA to ensure uniqueness
+        asset_content_type: application/octet-stream # Adjust content type if necessary
