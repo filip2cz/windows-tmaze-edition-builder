@@ -1,0 +1,90 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Install winget
+      uses: Cyberboss/install-winget@v1
+
+    - name: Install Windows ADK and MDT
+      shell: powershell
+      run: |
+        winget install --id Microsoft.WindowsADK --disable-interactivity --accept-source-agreements
+        winget install --id Microsoft.ADKPEAddon --disable-interactivity --accept-source-agreements
+        winget install --id Rustlang.Rustup --disable-interactivity --accept-source-agreements
+
+    - name: download powershell
+      shell: powershell
+      run: |
+        wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.zip
+        echo --------
+        echo --------
+        echo --------
+        pwd
+        echo --------
+        echo --------
+        echo --------
+
+    - name: Build and mount amd64 image
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        copype amd64 c:\winpe-amd64
+        Dism /Mount-Image /ImageFile:"c:\winpe-amd64\media\sources\boot.wim" /index:1 /MountDir:"c:\winpe-amd64\mount"
+
+    - name: Copy vcruntime140.dll into image
+      shell: powershell
+      run: |
+        cp C:\Windows\System32\vcruntime140.dll C:\winpe-amd64\mount\Windows\System32\vcruntime140.dll
+
+    - name: Compile TMaze
+      shell: powershell
+      run: |
+        git clone https://github.com/ur-fault/TMaze.git
+        cd TMaze
+        cargo build --release -F updates,hashbrown --no-default-features
+
+    - name: Copy TMaze into image
+      shell: powershell
+      run: |
+        cp .\TMaze\target\release\tmaze.exe C:\winpe-amd64\mount\tmaze.exe
+
+    - name: Unmount and build image
+      shell: cmd
+      run: |
+        "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        Dism /Unmount-Image /MountDir:c:\winpe-amd64\mount /Commit
+        MakeWinPEMedia /ISO c:\winpe-amd64 c:\winpe-amd64\Windows-TMaze-Edition.iso
+
+    - name: Copy things into dist directory
+      shell: powershell
+      run: |
+        mkdir dist
+        cp C:\winpe-amd64\Windows-TMaze-Edition.iso .\dist\Windows-TMaze-Edition.iso
+        cp C:\winpe-amd64\media\sources\boot.wim .\dist\boot.wim
+
+    - name: Set outputs
+      id: vars
+      run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+    - uses: ncipollo/release-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        artifacts: ".\dist\*"
+        commit: main
+        generateReleaseNotes: true
+        draft: true
+        # tag: ${{ github.event.head_commit.id }}
+        tag: ${{ steps.vars.outputs.sha_short }}
