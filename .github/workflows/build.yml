@@ -25,18 +25,6 @@ jobs:
         winget install --id Microsoft.ADKPEAddon --disable-interactivity --accept-source-agreements
         winget install --id Rustlang.Rustup --disable-interactivity --accept-source-agreements
 
-    - name: download powershell
-      shell: powershell
-      run: |
-        wget https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.zip
-        echo --------
-        echo --------
-        echo --------
-        pwd
-        echo --------
-        echo --------
-        echo --------
-
     - name: Build and mount amd64 image
       shell: cmd
       run: |
