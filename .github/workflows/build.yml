@@ -18,7 +18,7 @@ jobs:
     - name: Install winget
       uses: Cyberboss/install-winget@v1
 
-    - name: Install Windows ADK and MDT
+    - name: Install Windows ADK, Windows MDT and Cargo
       shell: powershell
       run: |
         winget install --id Microsoft.WindowsADK --disable-interactivity --accept-source-agreements
