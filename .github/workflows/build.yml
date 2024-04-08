@@ -46,7 +46,7 @@ jobs:
       shell: powershell
       run: |
         rm C:\winpe-amd64\mount\Windows\System32\startnet.cmd
-        cp .\start.net C:\winpe-amd64\mount\Windows\System32\startnet.cmd
+        cp .\startnet.cmd C:\winpe-amd64\mount\Windows\System32\startnet.cmd
 
     - name: Compile TMaze
       shell: powershell
