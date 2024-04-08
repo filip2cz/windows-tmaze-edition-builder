@@ -71,15 +71,21 @@ jobs:
 
     - name: Create new release
       shell: powershell
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release create --draft --tag ${{ env.releasever }}
 
     - name: Upload iso to release
       shell: powershell
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release upload ${{ env.releasever }} c:\winpe-amd64\Windows-TMaze-Edition.iso
 
     - name: Upload wim file to release
       shell: powershell
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         gh release upload ${{ env.releasever }} c:\winpe-amd64\media\sources\boot.wim
