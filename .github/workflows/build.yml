@@ -18,8 +18,7 @@ jobs:
     - name: Set version for release
       shell: powershell
       run: |
-        releasever="v0.1"
-        echo "RELEASEVER=$releasever" >> $GITHUB_ENV
+        echo "RELEASEVER=v0.1" >> $GITHUB_ENV
 
     - name: Install winget
       uses: Cyberboss/install-winget@v1
