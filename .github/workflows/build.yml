@@ -15,6 +15,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
+    - name: Set version for release
+        run: echo "releasever=v0.1" >> $GITHUB_ENV
+
     - name: Install winget
       uses: Cyberboss/install-winget@v1
 
@@ -66,14 +69,17 @@ jobs:
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         MakeWinPEMedia /ISO c:\winpe-amd64 c:\winpe-amd64\Windows-TMaze-Edition.iso
 
-    - name: Copy things into dist directory
+    - name: Create new release
       shell: powershell
       run: |
-        mkdir dist
-        cp C:\winpe-amd64\Windows-TMaze-Edition.iso .\dist\Windows-TMaze-Edition.iso
-        cp C:\winpe-amd64\media\sources\boot.wim .\dist\boot.wim
+        gh release create --draft --tag ${{ env.releasever }}
 
-    - uses: actions/upload-artifact@v4
-      with:
-        name: my-artifact
-        path: dist/
+    - name: Upload iso to release
+      shell: powershell
+      run: |
+        gh release upload ${{ env.releasever }} c:\winpe-amd64\Windows-TMaze-Edition.iso
+
+    - name: Upload wim file to release
+      shell: powershell
+      run: |
+        gh release upload ${{ env.releasever }} c:\winpe-amd64\media\sources\boot.wim
