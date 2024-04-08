@@ -15,11 +15,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Set version for release
-      shell: powershell
-      run: |
-        echo "RELEASEVER=v0.1" >> $GITHUB_ENV
-
     - name: Install winget
       uses: Cyberboss/install-winget@v1
 
@@ -76,4 +71,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create --draft ${{ env.RELEASEVER }} c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
+        gh release create --draft v0.1 c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
