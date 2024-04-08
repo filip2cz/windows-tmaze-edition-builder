@@ -42,6 +42,11 @@ jobs:
       run: |
         echo "X:\tmaze.exe" >> C:\winpe-amd64\mount\Windows\System32\startnet.cmd
 
+    - name: Exit after TMaze
+      shell: powershell
+      run: |
+        echo "exit" >> C:\winpe-amd64\mount\Windows\System32\startnet.cmd
+
     - name: Copy vcruntime140.dll into image
       shell: powershell
       run: |
