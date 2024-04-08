@@ -73,12 +73,7 @@ jobs:
         cp C:\winpe-amd64\Windows-TMaze-Edition.iso .\dist\Windows-TMaze-Edition.iso
         cp C:\winpe-amd64\media\sources\boot.wim .\dist\boot.wim
 
-    - name: Upload binaries to release
-      uses: svenstaro/upload-release-action@v2
+    - uses: actions/upload-artifact@v4
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-        file: dist/Windows-TMaze-Edition.iso
-        asset_name: Windows-TMaze-Edition.iso
-        tag: ${{ github.ref }}
-        overwrite: true
-        body: ""
+        name: my-artifact
+        path: dist/
