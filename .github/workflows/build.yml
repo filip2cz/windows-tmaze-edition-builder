@@ -37,15 +37,11 @@ jobs:
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         Dism /Mount-Image /ImageFile:"c:\winpe-amd64\media\sources\boot.wim" /index:1 /MountDir:"c:\winpe-amd64\mount"
 
-    - name: Autorun TMaze
+    - name: Copy custom startnet.cmd into image
       shell: powershell
       run: |
-        echo "X:\tmaze.exe" >> C:\winpe-amd64\mount\Windows\System32\startnet.cmd
-
-    - name: Exit after TMaze
-      shell: powershell
-      run: |
-        echo "exit" >> C:\winpe-amd64\mount\Windows\System32\startnet.cmd
+        rm C:\winpe-amd64\mount\Windows\System32\startnet.cmd
+        cp .\start.net C:\winpe-amd64\mount\Windows\System32\startnet.cmd
 
     - name: Copy vcruntime140.dll into image
       shell: powershell
