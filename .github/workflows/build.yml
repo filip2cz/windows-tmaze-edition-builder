@@ -16,9 +16,10 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set version for release
-        run: |
-          releasever="v0.1"
-          echo "RELEASEVER=$releasever" >> $GITHUB_ENV
+      shell: powershell
+      run: |
+        releasever="v0.1"
+        echo "RELEASEVER=$releasever" >> $GITHUB_ENV
 
     - name: Install winget
       uses: Cyberboss/install-winget@v1
