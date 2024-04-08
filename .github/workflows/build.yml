@@ -71,23 +71,9 @@ jobs:
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         MakeWinPEMedia /ISO c:\winpe-amd64 c:\winpe-amd64\Windows-TMaze-Edition.iso
 
-    - name: Create new release
+    - name: Create new release and upload files
       shell: powershell
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create --draft --tag ${{ env.RELEASEVER }}
-
-    - name: Upload iso to release
-      shell: powershell
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release upload ${{ env.RELEASEVER }} c:\winpe-amd64\Windows-TMaze-Edition.iso
-
-    - name: Upload wim file to release
-      shell: powershell
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        gh release upload ${{ env.RELEASEVER }} c:\winpe-amd64\media\sources\boot.wim
+        gh release create --draft ${{ env.RELEASEVER }} c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
