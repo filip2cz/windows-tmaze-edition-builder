@@ -16,7 +16,7 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set version for release
-        run: echo "releasever=v0.1" >> $GITHUB_ENV
+        run: echo "RELEASEVER=$(echo v0.1)" >> $GITHUB_ENV
 
     - name: Install winget
       uses: Cyberboss/install-winget@v1
@@ -74,18 +74,18 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create --draft --tag ${{ env.releasever }}
+        gh release create --draft --tag ${{ env.RELEASEVER }}
 
     - name: Upload iso to release
       shell: powershell
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release upload ${{ env.releasever }} c:\winpe-amd64\Windows-TMaze-Edition.iso
+        gh release upload ${{ env.RELEASEVER }} c:\winpe-amd64\Windows-TMaze-Edition.iso
 
     - name: Upload wim file to release
       shell: powershell
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release upload ${{ env.releasever }} c:\winpe-amd64\media\sources\boot.wim
+        gh release upload ${{ env.RELEASEVER }} c:\winpe-amd64\media\sources\boot.wim
