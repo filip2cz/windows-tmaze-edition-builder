@@ -63,12 +63,12 @@ jobs:
         rm C:\winpe-amd64\mount\Windows\System32\winpe.jpg
         cp .\winpe.jpg C:\winpe-amd64\mount\Windows\System32\winpe.jpg
 
-    - name: Copy README.md into image
+    - name: Copy README.md into media
       shell: powershell
       run: |
         cp .\README.md C:\winpe-amd64\media\README.md
 
-    - name: Copy README.md into iso
+    - name: Copy README.md into system
       shell: powershell
       run: |
         cp .\README.md C:\winpe-amd64\mount\README.md
