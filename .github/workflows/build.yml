@@ -66,6 +66,11 @@ jobs:
     - name: Copy README.md into image
       shell: powershell
       run: |
+        cp .\README.md C:\winpe-amd64\media\README.md
+
+    - name: Copy README.md into iso
+      shell: powershell
+      run: |
         cp .\README.md C:\winpe-amd64\mount\README.md
 
     - name: Compile TMaze
