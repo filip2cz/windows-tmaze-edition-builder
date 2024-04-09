@@ -86,6 +86,12 @@ jobs:
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         Dism /Unmount-Image /MountDir:c:\winpe-amd64\mount /Commit
 
+    - name: Delete Press any Key dialog
+      shell: powershell
+      run: |
+        rm C:\winpe-amd64\fwfiles\efisys.bin
+        cp "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\efisys_noprompt.bin" C:\winpe-amd64\fwfiles\efisys.bin
+
     - name: Build amd64 iso
       shell: cmd
       run: |
