@@ -57,12 +57,16 @@ jobs:
         $acl.SetAccessRule($accessRule)
         Set-Acl -Path $path -AclObject $acl
 
-
     - name: Copy custom backround into image
       shell: powershell
       run: |
         rm C:\winpe-amd64\mount\Windows\System32\winpe.jpg
         cp .\winpe.jpg C:\winpe-amd64\mount\Windows\System32\winpe.jpg
+
+    - name: Copy README.md into image
+      shell: powershell
+      run: |
+        cp .\README.md C:\winpe-amd64\mount\README.md
 
     - name: Compile TMaze
       shell: powershell
@@ -93,4 +97,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create --draft 1.14.3-1 c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
+        gh release create --draft 1.14.3-2 c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
