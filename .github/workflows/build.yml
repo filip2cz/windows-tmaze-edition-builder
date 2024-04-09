@@ -48,6 +48,12 @@ jobs:
         rm C:\winpe-amd64\mount\Windows\System32\startnet.cmd
         cp .\startnet.cmd C:\winpe-amd64\mount\Windows\System32\startnet.cmd
 
+    - name: Copy custom backround into image
+      shell: powershell
+      run: |
+        rm C:\winpe-amd64\mount\Windows\System32\winpe.jpg
+        cp .\winpe.jpg C:\winpe-amd64\mount\Windows\System32\winpe.jpg
+
     - name: Compile TMaze
       shell: powershell
       run: |
@@ -77,4 +83,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create --draft v0.1 c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
+        gh release create --draft 1.14.3-1 c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
