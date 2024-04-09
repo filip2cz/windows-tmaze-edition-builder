@@ -48,6 +48,16 @@ jobs:
         rm C:\winpe-amd64\mount\Windows\System32\startnet.cmd
         cp .\startnet.cmd C:\winpe-amd64\mount\Windows\System32\startnet.cmd
 
+    - name: Change access rules for winpe.jpg
+      shell: powershell
+      run: |
+        $path = "C:\winpe-amd64\mount\Windows\System32\winpe.jpg"
+        $acl = Get-Acl -Path $path
+        $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("Everyone", "FullControl", "Allow")
+        $acl.SetAccessRule($accessRule)
+        Set-Acl -Path $path -AclObject $acl
+
+
     - name: Copy custom backround into image
       shell: powershell
       run: |
