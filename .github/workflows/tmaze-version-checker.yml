@@ -1,0 +1,17 @@
+name: Run Every 12 Hours
+
+on:
+  schedule:
+    - cron: '0 */12 * * *'
+
+jobs:
+  run_every_12_hours:
+    name: Check latest version of TMaze
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Check new version and push
+        run: |
+          bash updatecheck.bash

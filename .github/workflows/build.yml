@@ -108,4 +108,5 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        gh release create --draft 1.14.3-2 c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
+        $ver = Get-Content -Path ".\tmaze.txt"
+        gh release create --draft $ver c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
