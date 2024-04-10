@@ -2,7 +2,7 @@ name: Run Every 12 Hours
 
 on:
   schedule:
-    - cron: '0 */12 * * *'
+    - cron: '0 0 * * *'
 
 jobs:
   run_every_12_hours:
