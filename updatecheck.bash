@@ -3,6 +3,8 @@ latest_tag=$(git ls-remote --tags https://github.com/ur-fault/TMaze | awk '{prin
 saved_version=$(cat tmaze.txt)
 
 if [ "$latest_tag" != "$saved_version" ]; then
+    git config --global user.name "github-actions"
+    git config --global user.email "you@example.com"
     echo "$latest_tag" > tmaze.txt
     echo "New version $latest_tag found"
     git add tmaze.txt
