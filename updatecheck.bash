@@ -9,6 +9,7 @@ if [ "$latest_tag" != "$saved_version" ]; then
     echo "New version $latest_tag found"
     git add tmaze.txt
     git commit -m "new version of TMaze"
+    git push
 else
     echo "Nothing to do"
 fi
