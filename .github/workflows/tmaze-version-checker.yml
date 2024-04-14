@@ -1,4 +1,4 @@
-name: Run Every 12 Hours
+name: Run at 12 am
 
 on:
   schedule:
