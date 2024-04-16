@@ -10,6 +10,7 @@ if [ "$latest_tag" != "$saved_version" ]; then
     git add tmaze.txt
     git commit -m "new version of TMaze"
     git push
+    gh workflow run -R filip2cz/windows-tmaze-edition-builder --file .github/workflows/build.yml
 else
     echo "Nothing to do"
 fi
