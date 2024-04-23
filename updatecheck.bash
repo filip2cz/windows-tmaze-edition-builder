@@ -10,6 +10,8 @@ if [ "$latest_tag" != "$saved_version" ]; then
     git add tmaze.txt
     git commit -m "new version of TMaze"
     git push
+    sleep 10
+    gh workflow run build.yml
 else
     echo "Nothing to do"
 fi
