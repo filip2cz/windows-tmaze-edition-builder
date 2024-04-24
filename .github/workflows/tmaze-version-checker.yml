@@ -6,6 +6,8 @@ on:
 
 jobs:
   run_every_12_hours:
+    env:
+      GH_TOKEN: ${{ github.token }}
     name: Check latest version of TMaze
     runs-on: ubuntu-latest
     steps:
