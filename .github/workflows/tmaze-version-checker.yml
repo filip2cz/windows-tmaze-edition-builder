@@ -1,4 +1,4 @@
-name: Run at 12 am
+name: TMaze version checker
 
 on:
   schedule:
