@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  run_every_12_hours:
+  run_at_12_am_hours:
     env:
       GH_TOKEN: ${{ github.token }}
     name: Check latest version of TMaze

@@ -75,7 +75,8 @@ jobs:
     - name: Compile TMaze
       shell: powershell
       run: |
-        git clone https://github.com/ur-fault/TMaze.git
+        $ver = Get-Content -Path ".\tmaze.txt"
+        git clone --branch $ver https://github.com/ur-fault/TMaze.git
         cd TMaze
         cargo build --release -F hashbrown --no-default-features
 
