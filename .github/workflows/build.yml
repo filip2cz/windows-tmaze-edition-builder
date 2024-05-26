@@ -132,6 +132,11 @@ jobs:
         Expand-Archive .\microsoft.ui.xaml.2.7.3.zip
         Add-AppxPackage .\microsoft.ui.xaml.2.7.3\tools\AppX\x64\Release\Microsoft.UI.Xaml.2.7.appx
 
+    - name: Install winget - Microsoft.UI.Xaml
+      shell: powershell
+      run: |
+        dotnet add package Microsoft.UI.Xaml --version 2.8.6
+
     - name: Install winget - Install the latest release of Microsoft.DesktopInstaller from GitHub
       shell: powershell
       run: |
