@@ -109,7 +109,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         $ver = Get-Content -Path ".\tmaze.txt"
-#        gh release create $ver c:\winpe-amd64\Windows-TMaze-Edition-amd64.iso c:\winpe-amd64\media\sources\boot.wim
         gh release create tmp c:\winpe-amd64\Windows-TMaze-Edition-amd64.iso c:\winpe-amd64\media\sources\boot.wim
 
 build x86:
@@ -221,5 +220,4 @@ build x86:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         $ver = Get-Content -Path ".\tmaze.txt"
-#        gh release create $ver c:\winpe-x86\Windows-TMaze-Edition.iso c:\winpe-x86\media\sources\boot.wim
         gh release create tmp c:\winpe-x86\Windows-TMaze-Edition.iso c:\winpe-x86\media\sources\boot.wim
