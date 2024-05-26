@@ -121,7 +121,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Install winget
-      shell:
+      shell: powershell
       run: |
         Add-AppxPackage 'https://aka.ms/Microsoft.VCLibs.x64.14.00.Desktop.appx'
         Invoke-WebRequest -Uri https://www.nuget.org/api/v2/package/Microsoft.UI.Xaml/2.7.3 -OutFile .\microsoft.ui.xaml.2.7.3.zip
