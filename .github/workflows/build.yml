@@ -5,7 +5,7 @@ on:
 
 
 jobs:
-  build:
+  build amd64:
     permissions:
       contents: write
     runs-on: windows-latest
@@ -109,4 +109,115 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         $ver = Get-Content -Path ".\tmaze.txt"
-        gh release create $ver c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\media\sources\boot.wim
+        gh release create $ver c:\winpe-amd64\Windows-TMaze-Edition-amd64.iso c:\winpe-amd64\media\sources\boot.wim
+
+build x86:
+    permissions:
+      contents: write
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install winget
+      uses: Cyberboss/install-winget@v1
+
+    - name: Install Windows ADK, Windows MDT and Cargo
+      shell: powershell
+      run: |
+        winget install --id Microsoft.WindowsADK --disable-interactivity --accept-source-agreements
+        winget install --id Microsoft.ADKPEAddon --disable-interactivity --accept-source-agreements
+        winget install --id Rustlang.Rustup --disable-interactivity --accept-source-agreements
+
+    - name: Install Rust i686 target
+      shell: powershell
+      run: |
+        rustup target add i686-pc-windows-msvc
+
+    - name: Build x86 image
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        copype x86 c:\winpe-x86
+
+    - name: Mount x86 image
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        Dism /Mount-Image /ImageFile:"c:\winpe-x86\media\sources\boot.wim" /index:1 /MountDir:"c:\winpe-x86\mount"
+
+    - name: Copy vcruntime140.dll into image
+      shell: powershell
+      run: |
+        cp C:\Windows\System32\vcruntime140.dll C:\winpe-x86\mount\Windows\System32\vcruntime140.dll
+
+    - name: Copy custom startnet.cmd into image
+      shell: powershell
+      run: |
+        rm C:\winpe-x86\mount\Windows\System32\startnet.cmd
+        cp .\startnet.cmd C:\winpe-x86\mount\Windows\System32\startnet.cmd
+
+    - name: Change access rules for winpe.jpg
+      shell: powershell
+      run: |
+        $path = "C:\winpe-x86\mount\Windows\System32\winpe.jpg"
+        $acl = Get-Acl -Path $path
+        $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("Everyone", "FullControl", "Allow")
+        $acl.SetAccessRule($accessRule)
+        Set-Acl -Path $path -AclObject $acl
+
+    - name: Copy custom backround into image
+      shell: powershell
+      run: |
+        rm C:\winpe-x86\mount\Windows\System32\winpe.jpg
+        cp .\winpe.jpg C:\winpe-x86\mount\Windows\System32\winpe.jpg
+
+    - name: Copy README.md into media
+      shell: powershell
+      run: |
+        cp .\README.md C:\winpe-x86\media\README.md
+
+    - name: Copy README.md into system
+      shell: powershell
+      run: |
+        cp .\README.md C:\winpe-x86\mount\README.md
+
+    - name: Compile TMaze
+      shell: powershell
+      run: |
+        $ver = Get-Content -Path ".\tmaze.txt"
+        git clone --branch $ver https://github.com/ur-fault/TMaze.git
+        cd TMaze
+        cargo build --target=i686-pc-windows-msvc --release -F hashbrown --no-default-features
+
+    - name: Copy TMaze into image
+      shell: powershell
+      run: |
+        cp .\TMaze\target\release\tmaze.exe C:\winpe-x86\mount\tmaze.exe
+
+    - name: Unmount x86 image
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        Dism /Unmount-Image /MountDir:c:\winpe-x86\mount /Commit
+
+    - name: Delete Press any Key dialog
+      shell: powershell
+      run: |
+        rm C:\winpe-x86\fwfiles\efisys.bin
+        cp "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg\efisys_noprompt.bin" C:\winpe-x86\fwfiles\efisys.bin
+
+    - name: Build x86 iso
+      shell: cmd
+      run: |
+        call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
+        MakeWinPEMedia /ISO c:\winpe-x86 c:\winpe-x86\Windows-TMaze-Edition-x86.iso
+
+    - name: Create new release and upload files
+      shell: powershell
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        $ver = Get-Content -Path ".\tmaze.txt"
+        gh release create $ver c:\winpe-x86\Windows-TMaze-Edition.iso c:\winpe-x86\media\sources\boot.wim
