@@ -47,6 +47,11 @@ jobs:
         rm C:\winpe-amd64\mount\Windows\System32\startnet.cmd
         cp .\startnet.cmd C:\winpe-amd64\mount\Windows\System32\startnet.cmd
 
+    - name: Copy custom disclaimer.bat into image
+      shell: powershell
+      run: |
+        cp .\startnet.cmd C:\winpe-amd64\mount\Windows\System32\disclaimer.bat
+
     - name: Change access rules for winpe.jpg
       shell: powershell
       run: |
