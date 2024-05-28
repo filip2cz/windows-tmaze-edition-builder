@@ -5,7 +5,7 @@ on:
 
 
 jobs:
-  build-amd64:
+  build amd64:
     permissions:
       contents: write
     runs-on: windows-latest
@@ -111,7 +111,7 @@ jobs:
         $ver = Get-Content -Path ".\tmaze.txt"
         gh release create tmp c:\winpe-amd64\Windows-TMaze-Edition-amd64.iso c:\winpe-amd64\media\sources\boot.wim
 
-  build-x86:
+  build x86:
     permissions:
       contents: write
     runs-on: windows-latest
