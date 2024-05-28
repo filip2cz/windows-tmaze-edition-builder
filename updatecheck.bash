@@ -8,7 +8,7 @@ if [ "$latest_tag" != "$saved_version" ]; then
     echo "$latest_tag" > tmaze.txt
     echo "New version $latest_tag found"
     git add tmaze.txt
-    git commit -m "new version of TMaze $latest_tag"
+    git commit -m "new version of TMaze: $latest_tag"
     git push
     sleep 10
     gh workflow run build.yml
