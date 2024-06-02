@@ -83,7 +83,7 @@ jobs:
         $ver = Get-Content -Path ".\tmaze.txt"
         git clone --branch $ver https://github.com/ur-fault/TMaze.git
         cd TMaze
-        cargo build --release -F hashbrown --no-default-features
+        cargo build --release --no-default-features
 
     - name: Copy TMaze into image
       shell: powershell
