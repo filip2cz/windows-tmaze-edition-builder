@@ -108,6 +108,13 @@ jobs:
         call "C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\DandISetEnv.bat"
         MakeWinPEMedia /ISO c:\winpe-amd64 c:\winpe-amd64\Windows-TMaze-Edition.iso
 
+    - name: Add version into filename
+      shell: powershell
+      run: |
+        $ver = Get-Content -Path ".\tmaze.txt"
+        $fileVer = $ver.Replace('.', '_')
+        mv c:\winpe-amd64\Windows-TMaze-Edition.iso c:\winpe-amd64\Windows-TMaze-Edition-$fileVer.iso
+
     - name: Create new release and upload files
       shell: powershell
       env:
