@@ -14,9 +14,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Install winget
-      uses: Cyberboss/install-winget@v1
-
     - name: Install Windows ADK, Windows MDT and Cargo
       shell: powershell
       run: |
